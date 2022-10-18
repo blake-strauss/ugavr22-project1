@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<HidingLocation> hidingLocations; 
     [SerializeField] List<TargetLocation> targetLocations;
     [SerializeField] Transform startLocation;
+    [SerializeField] Transform mazeStartLocation;
     [SerializeField] StartButton startButton;
     
     public enum GAME_STATE { IDLE, STARTED, FINISHED }
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviour
     IEnumerator Start()
     {
         startButton.buttonPressed += startPressed;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(0.0f);
         StartCoroutine(resetGame());
     }
     
@@ -30,9 +31,10 @@ public class GameManager : MonoBehaviour
         {
             startGame();
         }
-        else if(gameState == GAME_STATE.STARTED)
+        else if (gameState == GAME_STATE.STARTED)
         {
-
+            player.doTeleport(mazeStartLocation.position);
+            
             bool gameFinished = true;
             foreach(TargetLocation t in targetLocations)
             {

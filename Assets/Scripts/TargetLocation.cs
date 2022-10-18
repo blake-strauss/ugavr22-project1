@@ -10,12 +10,10 @@ public class TargetLocation : MonoBehaviour
     [SerializeField] GameObject targetCollider;
     public SearchObject target;
     public bool isFound;
-    public TMP_Text label3d;
     
     // Start is called before the first frame update
     void Start()
     {
-        label3d.text = target.label;
         targetCollider.GetComponent<Renderer>().material.color = notFoundColor;
     }
 
