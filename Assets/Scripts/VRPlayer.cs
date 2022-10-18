@@ -155,9 +155,11 @@ public class VRPlayer : MonoBehaviour
                 }
                 else
                 {
-                    //move the object in relation to controller movement
+					//move the object in relation to controller movement
                     VRGrabbable g = grabbedObjects[handIndex];
                     Rigidbody rb = g.GetComponent<Rigidbody>();
+
+                    rb.constraints = RigidbodyConstraints.None;
 
                     Vector3 between = hands[handIndex].grabOffset.position - g.transform.position;
                     Vector3 direction = between.normalized;

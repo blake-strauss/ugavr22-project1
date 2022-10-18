@@ -29,10 +29,14 @@ public class TargetLocation : MonoBehaviour
         if (rb == null) return;
         SearchObject so = rb.GetComponent<SearchObject>();
         if (so == null) return;
-        if(so == target)
+        if (so == target)
         {
             isFound = true;
             targetCollider.GetComponent<Renderer>().material.color = foundColor;
+            rb = null;
+            /*other.transform.position = transform.position;
+            other.transform.rotation = transform.rotation;
+            rb.constraints = RigidbodyConstraints.FreezeAll;*/
 
         }
     }

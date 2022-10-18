@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         
     }
-    
+
     public void startGame()
     {
         List<HidingLocation> hidingTemp = new List<HidingLocation>(hidingLocations);
