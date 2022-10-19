@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform mazeStartLocation;
     [SerializeField] StartButton startButton;
     [SerializeField] Door exitDoor;
+    [SerializeField] TMP_Text instructionText;
     GameObject finishedKey;
     
     public enum GAME_STATE { IDLE, STARTED, FINISHED }
@@ -22,14 +26,14 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        player.doTeleport(startLocation.position, startLocation.rotation);
         finishedKey = GameObject.Find("key");
         foreach (SearchObject so in objectsToFind)
         {
             so.gameObject.SetActive(false);
         }
         startButton.buttonPressed += startPressed;
-        yield return new WaitForSeconds(0.0f);
-        StartCoroutine(resetGame());
+        yield return new WaitForSeconds(0.0f);;
     }
     
     void startPressed(VRHand hand)
@@ -40,7 +44,11 @@ public class GameManager : MonoBehaviour
         }
         else if (gameState == GAME_STATE.STARTED)
         {
-            //reset game
+            
+        }
+        else if (gameState == GAME_STATE.FINISHED)
+        {
+            resetGame();
         }
     }
 
@@ -51,10 +59,16 @@ public class GameManager : MonoBehaviour
         bool spawnFinishedKey = true;
         foreach(TargetLocation t in targetLocations)
         {
+            if (t.clearHand)
+            {
+                t.clearHand = false;
+                player.hands[0].grabbables.Clear();
+                player.hands[1].grabbables.Clear();
+            }
             if (!t.isFound)
             {
                 spawnFinishedKey = false;
-                break;
+                //break;
             }
         }
         if (spawnFinishedKey)
@@ -66,13 +80,14 @@ public class GameManager : MonoBehaviour
         //if the key is inserted into the door, player wins game
         if (exitDoor.isUnlocked)
         {
+            exitDoor.isUnlocked = false;
             endGame();
         }
     }
 
     public void startGame()
     {
-        player.doTeleport(mazeStartLocation.position);
+        player.doTeleport(mazeStartLocation.position, mazeStartLocation.rotation);
         foreach (SearchObject so in objectsToFind)
         {
             so.gameObject.SetActive(true);
@@ -92,15 +107,16 @@ public class GameManager : MonoBehaviour
 
     public void endGame()
     {
-        player.doTeleport(mazeStartLocation.position);
+        player.doTeleport(startLocation.position, startLocation.rotation);
+        gameState = GAME_STATE.FINISHED;
+        instructionText.text = "Congratulations! You escaped the maze!\nPress the green button to play again!\n\n" +
+                               "Credits: Dr. Kyle Johnsen - item manipulation, locomotion\nnewagesoup - wink sound effect\nAndrey Ferar - door texture\nLowlyPoly - grass texture\n" +
+                               "Game-Ready Studios - wall texture";
     }
 
-    public IEnumerator resetGame()
+    public void resetGame()
     {
-        yield return new WaitForSeconds(1.0f);
-        player.doTeleport(startLocation.position);
         gameState = GAME_STATE.IDLE;
-        yield return new WaitForSeconds(1.0f);
-
+        SceneManager.LoadScene(0);
     }
 }

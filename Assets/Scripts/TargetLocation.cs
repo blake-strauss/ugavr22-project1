@@ -11,6 +11,7 @@ public class TargetLocation : MonoBehaviour
     [SerializeField] GameObject targetCollider;
     public SearchObject target;
     public bool isFound;
+    public bool clearHand;
     
     // Start is called before the first frame update
     void Start()
@@ -33,11 +34,12 @@ public class TargetLocation : MonoBehaviour
         if (so == target)
         {
             isFound = true;
+            clearHand = true;
             targetCollider.GetComponent<Renderer>().material.color = foundColor;
             other.transform.position = transform.position;
             other.transform.rotation = transform.rotation;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            so.pingAudio = false; //stop playing audio
+            so.pingLocation = false; //stop playing pinging sound
+            Destroy(rb);
         }
     }
 

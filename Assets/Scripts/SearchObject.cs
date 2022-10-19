@@ -5,27 +5,25 @@ using TMPro;
 
 public class SearchObject : MonoBehaviour
 {
-    [SerializeField] AudioClip winkSound;
-    [SerializeField] private int soundInterval; //seconds
-
-    public bool pingAudio;
+    [SerializeField] float soundInterval; //seconds
+    public bool pingLocation = true;
+    public AudioSource audioSource;
+    private float timer;
+    
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SoundOut());
-    }
-    
-    IEnumerator SoundOut()
-    {
-        while (pingAudio) {
-            AudioSource.PlayClipAtPoint(winkSound, transform.position);
-            yield return new WaitForSeconds(soundInterval);
-        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        timer += Time.deltaTime;
+        if (timer > soundInterval && pingLocation)
+        {
+            AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+            timer = 0;
+        }
     }
 }

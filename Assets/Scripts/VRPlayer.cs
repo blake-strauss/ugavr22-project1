@@ -39,10 +39,8 @@ public class VRPlayer : MonoBehaviour
 	public float teleporterMaxDistance;
 	
 	public Transform head; //the vr camera
-    
-	
-    
-    // Start is called before the first frame update
+
+	// Start is called before the first frame update
     void Start()
     {
         
@@ -58,10 +56,11 @@ public class VRPlayer : MonoBehaviour
 	    return feetInWorld;
     }
     
-    public void doTeleport(Vector3 targetFootPosWorld)
+    public void doTeleport(Vector3 targetFootPosWorld, Quaternion rotation)
     {
 	    Vector3 offset = targetFootPosWorld - getFootPositionWorld();
 	    transform.position = transform.position + offset;
+	    transform.rotation = rotation;
     }
 
     void teleport(int handIndex) //handle teleporting states
@@ -79,7 +78,7 @@ public class VRPlayer : MonoBehaviour
 		    {
 			    if (teleporterValid[handIndex])
                 {
-                    doTeleport(teleporterTargetPoses[handIndex].position);
+                    doTeleport(teleporterTargetPoses[handIndex].position, transform.rotation);
                 }
                 teleportStates[handIndex] = TELEPORT_STATE.WAITING;
                 teleporterTargetPoses[handIndex].gameObject.SetActive(false);
@@ -159,8 +158,6 @@ public class VRPlayer : MonoBehaviour
                     VRGrabbable g = grabbedObjects[handIndex];
                     Rigidbody rb = g.GetComponent<Rigidbody>();
 
-                    rb.constraints = RigidbodyConstraints.None;
-
                     Vector3 between = hands[handIndex].grabOffset.position - g.transform.position;
                     Vector3 direction = between.normalized;
 
@@ -209,7 +206,7 @@ public class VRPlayer : MonoBehaviour
 			    Vector3 currentFootPosition = getFootPositionWorld();
 
 			    transform.Rotate(0, rotateAmount, 0, Space.Self);
-			    doTeleport(currentFootPosition); //moves back to where we were
+			    doTeleport(currentFootPosition, transform.rotation); //moves back to where we were
 		    }
 	    }
 	    else if (snapStates[handIndex] == SNAP_STATE.ACTIVE)
@@ -222,6 +219,7 @@ public class VRPlayer : MonoBehaviour
 		    }
 	    }
     }
+    
 
     // Update is called once per frame
     void Update()
