@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Oculus.Interaction;
 using UnityEngine;
 using TMPro;
 
@@ -33,11 +34,10 @@ public class TargetLocation : MonoBehaviour
         {
             isFound = true;
             targetCollider.GetComponent<Renderer>().material.color = foundColor;
-            rb = null;
-            /*other.transform.position = transform.position;
+            other.transform.position = transform.position;
             other.transform.rotation = transform.rotation;
-            rb.constraints = RigidbodyConstraints.FreezeAll;*/
-
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            so.pingAudio = false; //stop playing audio
         }
     }
 
