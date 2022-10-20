@@ -14,3 +14,5 @@ This project is my first VR game created in Unity. The game introduces basic loc
 - The accuracy of the hand manipulation of the object could be improved. When holding an object and moving your hand, the object jitters and does not provide a smooth motion in sync with the hand. This is probably due to the complex rigidbody as a result from creating the object in Blender.
 
 # Video
+See eLC for video.
+Project .apk uploaded to releases.
